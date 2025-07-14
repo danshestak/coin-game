@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coin Game</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename=['images/coin-green.png', 'images/coin-yellow.png', 'images/coin-blue.png'] | random) }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script type="module" src="{{ url_for('static', filename='js/modules/input.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/modules/output.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/modules/effects.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script> 
+  </head>
+  <body>
+    <div class="game">
+      <div id="header">
+        <div id="header-info">
+          Round 1/20
+        </div>
+        <div id="balance">
+          Balance: <span style="color:lightgrey">0</span>
+        </div>
+      </div>
+
+      <div class="main">
+        <div id="main-text">Welcome to Coin Game!</div>
+
+        <div id="coins">
+          <button id="green-coin">
+            <img src="{{ url_for('static', filename='images/coin-green.png') }}" alt="Green coin">
+          </button>
+          <button id="yellow-coin">
+            <img src="{{ url_for('static', filename='images/coin-yellow.png') }}" alt="Yellow coin">
+          </button>
+          <button id="blue-coin">
+            <img src="{{ url_for('static', filename='images/coin-blue.png') }}" alt="Blue coin">
+          </button>
+        </div>
+        
+        <button id="confirm">Start game</button>
+      </div>
+
+      <div id="footer">
+        
+      </div>
+    </div>
+  </body>
+</html>

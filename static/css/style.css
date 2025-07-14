@@ -1,0 +1,91 @@
+html * {
+  font-family: Courier, monospace;
+  color:white;
+  font-size: small;
+  text-align: center;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+  height: 480px;
+  background-color: black;
+  padding: 16px;
+  gap:16px;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+}
+
+#balance {
+  width: fit-content;
+  border: 1px solid white;
+  padding: 8px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  justify-content: center;
+  align-items: center;
+  gap:24px;
+}
+
+.main * {
+  width: fit-content;
+}
+
+#main-text, #main-text * {
+  font-size: large;
+}
+
+#coins {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+#coins * {
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  image-rendering: pixelated;
+  transition-property: all;
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#coins * :hover {
+  scale: 1.1;
+  filter: brightness(120%) contrast(120%) saturate(80%);
+}
+
+#confirm {
+  color:black;
+  font-weight: bold;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#footer {
+  display: flex;
+  justify-content: center;
+}
+
+/* scripted classes */
+
+.disabled {
+  pointer-events: none;
+}
+
+.transparent {
+  filter: opacity(30%);
+}
