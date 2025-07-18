@@ -1,6 +1,6 @@
 const res = await fetch("static/csv/input.csv", {method: "get", headers: {"content-type": "text/csv;charset=UTF-8",}});
 if (!res.ok) {
-    throw new Error(`HTTP error! status: `);
+    throw new Error("Error fetching content");
 }
 
 let csv = await res.text();

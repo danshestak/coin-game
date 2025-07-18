@@ -1,6 +1,6 @@
 import { delay, typewriter, highlightOption } from "./modules/effects.js";
 import { getLength, getValue } from "./modules/input.js";
-import { newLogEntry, getLog } from "./modules/output.js";
+import { fetchUUID, newLogEntry, getLog } from "./modules/output.js";
 
 const header = document.getElementById("header");
 const headerInfo = document.getElementById("header-info");
@@ -23,6 +23,8 @@ coins.style.display = "none";
 confirmButton.addEventListener("click", async function() {
     confirmButton.style.display = "none";
     
+    await fetchUUID()
+
     // await typewriter(mainText, "Looking for partner");
     // let ellipses = 0;
     // const ellipsesInterval = setInterval(() => {
@@ -291,6 +293,6 @@ async function newRound() {
         confirmButton.style.display = "none";
 
         typewriter(mainText, "The game has ended.");
-        typewriter(mainText, "Thank you for playing! your final score was "+score.toString()+".");
+        typewriter(mainText, "Thank you for playing! Your final score was "+score.toString()+".");
     }
 }
