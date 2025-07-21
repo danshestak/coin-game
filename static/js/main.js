@@ -1,6 +1,6 @@
 import { delay, typewriter, highlightOption } from "./modules/effects.js";
-import { getLength, getValue } from "./modules/input.js";
-import { fetchUUID, newLogEntry, getLog } from "./modules/output.js";
+// import { getLength, getValue } from "./modules/input.js";
+import { fetchUUID, postRoundData } from "./modules/output.js";
 
 const header = document.getElementById("header");
 const headerInfo = document.getElementById("header-info");
@@ -20,10 +20,14 @@ header.style.visibility = "hidden";
 footer.style.visibility = "hidden";
 coins.style.display = "none";
 
+// await fetchUUID();
+// await postRoundData(1, "blue", 100, 11.2);
+// await postRoundData(2, "yellow", -200, 21.3);
+
 confirmButton.addEventListener("click", async function() {
     confirmButton.style.display = "none";
     
-    await fetchUUID()
+    await fetchUUID();
 
     // await typewriter(mainText, "Looking for partner");
     // let ellipses = 0;
