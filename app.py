@@ -28,12 +28,14 @@ class Game(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     rounds = db.relationship("Round", backref="parent_game", lazy=True)
 
+    def get_current_round_number(self):
+        return len(self.rounds)+1
+
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.Integer, nullable=False, unique=True)
     selected = db.Column(db.String(length=15), nullable=False)
     value = db.Column(db.Integer, nullable=False)
-    deltaTime = db.Column(db.Float, nullable=False)
+    deltatime = db.Column(db.Float, nullable=False)
     game = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=False)
 
 with app.app_context():
@@ -42,10 +44,9 @@ with app.app_context():
 
 # ---- FORMS ----
 class RoundDataForm(FlaskForm):
-    number = IntegerField("number", validators=[DataRequired(), NumberRange(min=1, max=50)])
     selected = StringField("selected", validators=[DataRequired(), Length(max=12)])
     value = IntegerField("value", validators=[DataRequired()])
-    deltaTime = FloatField("deltaTime", validators=[DataRequired(), NumberRange(min=0)])
+    deltatime = FloatField("deltatime", validators=[DataRequired(), NumberRange(min=0)])
 
 
 # ---- ROUTES ----
@@ -71,10 +72,10 @@ def start_game():
 
 @app.route("/round_data/<string:url_uuid>", methods=["GET", "POST"])
 def round_data(url_uuid):
-    url_game = Game.query.filter_by(uuid=url_uuid).first()
+    url_game:Game|None = Game.query.filter_by(uuid=url_uuid).first()
     if url_game == None:
         return "There was an error managing round data", 400
-    
+
     if request.method == "GET":
         pass
     elif request.method == "POST":
@@ -82,10 +83,9 @@ def round_data(url_uuid):
         if form.validate_on_submit():
             try:
                 new_round = Round(
-                    number=form.number.data, 
                     selected=form.selected.data, 
                     value=form.value.data, 
-                    deltaTime=form.deltaTime.data,
+                    deltatime=form.deltatime.data,
                     game=url_game.id
                 )
                 db.session.add(new_round)

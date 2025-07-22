@@ -11,12 +11,11 @@ export async function fetchUUID() {
     console.log(uuid);
 }
 
-export async function postRoundData(roundNumber, selected, value, deltaTime) {
+export async function postRoundData(selected, value, deltatime) {
     const formData = new FormData();
-    formData.append("number", roundNumber);
     formData.append("selected", selected);
     formData.append("value", value);
-    formData.append("deltaTime", Math.max(0, deltaTime));
+    formData.append("deltatime", Math.max(0, deltatime));
 
     const res = await fetch("round_data/"+uuid, {method: "POST", body: formData, headers: {'X-CSRFToken': csrfToken}});
     if (!res.ok) {

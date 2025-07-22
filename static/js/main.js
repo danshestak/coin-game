@@ -20,9 +20,9 @@ header.style.visibility = "hidden";
 footer.style.visibility = "hidden";
 coins.style.display = "none";
 
-// await fetchUUID();
-// await postRoundData(1, "blue", 100, 11.2);
-// await postRoundData(2, "yellow", -200, 21.3);
+await fetchUUID();
+await postRoundData("blue", 100, 11.2);
+await postRoundData("yellow", -200, 21.3);
 
 confirmButton.addEventListener("click", async function() {
     confirmButton.style.display = "none";
@@ -268,7 +268,7 @@ async function playerPick(passed) {
     }
 
     if (!passed) {
-        newLogEntry(raceWinner, points, (endTime.getTime()-startTime.getTime())/1000);
+        postRoundData(raceWinner, points, (endTime.getTime()-startTime.getTime())/1000);
     }
 
     return points;
