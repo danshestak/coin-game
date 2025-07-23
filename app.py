@@ -8,6 +8,7 @@ import uuid
 import datetime
 import os
 import random
+import reader
 
 
 # ---- CONFIG ----
@@ -60,8 +61,8 @@ def start_game():
     while Game.query.filter_by(uuid=new_uuid).count() > 0:
         new_uuid = uuid.uuid4().hex
     
-    new_csv = random.choice(os.listdir("csv"))
-
+    new_csv = random.choice(reader.get_csv_names())
+    
     try:
         new_game = Game(uuid=new_uuid, csv=new_csv)
         db.session.add(new_game)
