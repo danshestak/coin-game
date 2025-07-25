@@ -1,6 +1,5 @@
 import { delay, typewriter, highlightOption } from "./modules/effects.js";
-// import { getLength, getValue } from "./modules/input.js";
-import { fetchUUID, postRoundData } from "./modules/output.js";
+import { startGame, postRoundData, fetchRoundData, readRoundData } from "./modules/rounds.js";
 
 const header = document.getElementById("header");
 const headerInfo = document.getElementById("header-info");
@@ -20,14 +19,10 @@ header.style.visibility = "hidden";
 footer.style.visibility = "hidden";
 coins.style.display = "none";
 
-await fetchUUID();
-await postRoundData("blue", 100, 11.2);
-await postRoundData("yellow", -200, 21.3);
-
 confirmButton.addEventListener("click", async function() {
     confirmButton.style.display = "none";
     
-    await fetchUUID();
+    await startGame();
 
     // await typewriter(mainText, "Looking for partner");
     // let ellipses = 0;
@@ -166,7 +161,7 @@ async function partnerPick(passed) {
     }
 
     let winner = null;
-    if (!passed && parseInt(getValue(round, "p2surrendered"))) {
+    if (!passed && parseInt(readRoundData("p2surrendered"))) {
         winner = "pass";
         typewriter(mainText, "Your partner passed their turn to you!");
     } else {
@@ -179,9 +174,9 @@ async function partnerPick(passed) {
     let points = null;
     if (winner != "pass") {
         if (passed) {
-            points = getValue(round, "p1surrendered");
+            points = readRoundData("p1surrendered");
         } else {
-            points = getValue(round, "p2move");
+            points = readRoundData("p2move");
         }
         points = parseInt(points);
 
@@ -255,9 +250,9 @@ async function playerPick(passed) {
     let points = null;
     if (raceWinner != "pass" && raceWinner != "timeout") {
         if (passed) {
-            points = getValue(round, "p2move");
+            points = readRoundData("p2move");
         } else {
-            points = getValue(round, "p1move");
+            points = readRoundData("p1move");
         }
         points = parseInt(points);
 
@@ -276,7 +271,9 @@ async function playerPick(passed) {
 
 async function newRound() {
     round++;
-    typewriter(headerInfo, "Round "+round.toString()+"/"+(getLength()-1).toString());
+    typewriter(headerInfo, "Round "+round.toString()+"/"+readRoundData("roundsQuantity").toString());
+
+    await fetchRoundData();
 
     if (playerFirst) {
         await playerPick(false);
@@ -286,9 +283,7 @@ async function newRound() {
         await playerPick(false);
     }
 
-    console.log(getLog())
-
-    if (round <= (getLength()-1)) {
+    if (round < readRoundData("roundsQuantity")) {
         newRound();
     } else {
         header.style.visibility = "hidden";
@@ -296,7 +291,7 @@ async function newRound() {
         coins.style.display = "none";
         confirmButton.style.display = "none";
 
-        typewriter(mainText, "The game has ended.");
-        typewriter(mainText, "Thank you for playing! Your final score was "+score.toString()+".");
+        await typewriter(mainText, "The game has ended...");
+        await typewriter(mainText, "Thank you for playing! Your final score was "+score.toString()+".");
     }
 }

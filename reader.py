@@ -38,11 +38,18 @@ def get_value(csv_name:str, column_name:str, round_number:int) -> int|bool:
     
     row_list = None
     try:
-        row_list = cached_csv[round_number+1]
+        row_list = cached_csv[round_number-1]
     except IndexError:
         raise ValueError(f"round_number {round_number} is out of range")
     
     return row_list[column_index]
 
+def get_rounds_quantity(csv_name:str) -> int:
+    cached_csv = _cached_csvs.get(csv_name)
+    if cached_csv == None:
+        raise ValueError(f"csv_name {csv_name} does not match any existing csv")
+    
+    return len(cached_csv)
+
 def get_csv_names() -> list:
-    return list(_KEYS.keys())
+    return list(_cached_csvs.keys())
