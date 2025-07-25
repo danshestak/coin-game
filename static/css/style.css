@@ -5,14 +5,18 @@ html * {
   text-align: center;
 }
 
-.game {
+html, body {
+    height: 100dvh;
+}
+
+body {
   display: flex;
   flex-direction: column;
-  width: 640px;
-  height: 480px;
+  box-sizing: border-box;
   background-color: black;
   padding: 16px;
   gap:16px;
+  margin: 0px;
 }
 
 #header {
