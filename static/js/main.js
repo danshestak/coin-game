@@ -1,4 +1,4 @@
-import { delay, typewriter, highlightOption } from "./modules/effects.js";
+import { delay, typewriter, highlightOption, numberToColoredSpan } from "./modules/effects.js";
 import { startGame, postRoundData, fetchRoundData, readRoundData } from "./modules/rounds.js";
 
 const header = document.getElementById("header");
@@ -52,6 +52,7 @@ confirmButton.addEventListener("click", async function() {
     // typewriter(mainText, "Good luck!");
     // await delay(4000);
 
+    balance.innerHTML = "Balance: "+numberToColoredSpan(0);
     header.style.visibility = "visible";
     footer.style.visibility = "visible";
     coins.style.display = "flex";
@@ -61,20 +62,10 @@ confirmButton.addEventListener("click", async function() {
 }, {once: true});
 
 async function adjustScore(messageStart, delta, messageEnd) {
-    function getColor(number) {
-        if (number > 0) {
-            return "lime";
-        } else if (number < 0) {
-            return "red";
-        } else {
-            return "lightgrey";
-        }
-    }
-    
     score += delta;
     
-    await typewriter(mainText, messageStart+'<span style="color: '+getColor(delta)+';">'+delta.toString()+'</span>'+messageEnd);
-    typewriter(balance, 'Balance: <span style="color: '+getColor(score)+';">'+score.toString()+'</span>');
+    await typewriter(mainText, messageStart+numberToColoredSpan(delta)+messageEnd);
+    typewriter(balance, "Balance: "+numberToColoredSpan(delta));
 }
 
 function enablePlayerPick() {
@@ -292,6 +283,7 @@ async function newRound() {
         confirmButton.style.display = "none";
 
         await typewriter(mainText, "The game has ended...");
-        await typewriter(mainText, "Thank you for playing! Your final score was "+score.toString()+".");
+        await delay(3000);
+        await typewriter(mainText, "Thank you for playing! Your final score was "+numberToColoredSpan(score)+".");
     }
 }

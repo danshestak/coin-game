@@ -72,3 +72,7 @@ export function highlightOption(option) {
         }
     }
 }
+
+export function numberToColoredSpan(number) {
+    return '<span style="color: ' + ((number>=0)?'lime':'red') + ';">'+number.toString()+'</span>';
+}
