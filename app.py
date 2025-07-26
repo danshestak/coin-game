@@ -18,6 +18,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 CSRFProtect(app)
+EXPORT_ENABLED = False
 
 
 # ---- DATABASE ----
@@ -132,7 +133,7 @@ def round_data(url_uuid):
 
 @app.route("/export/<string:access_code>", methods=["GET"])
 def export(access_code:str):
-    if not access_code or access_code != os.environ.get("EXPORT_ACCESS_CODE"):
+    if not EXPORT_ENABLED or access_code != os.environ.get("EXPORT_ACCESS_CODE"):
         abort(404)
         return
     
