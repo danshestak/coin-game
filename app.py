@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify, send_file, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
@@ -7,6 +7,8 @@ from wtforms.validators import DataRequired, NumberRange, Length
 import uuid
 import datetime
 import os
+import io
+import zipfile
 import random
 import reader
 
@@ -31,6 +33,16 @@ class Game(db.Model):
 
     def get_current_round_number(self):
         return len(self.rounds)+1
+    
+    def as_csv_str(self) -> str:
+        round_number = 1
+        csv_str = "round, selected, value, secs.to.click\n"
+        for round in self.rounds:
+            csv_str += f"{round_number}, {round.selected}, {round.value}, {round.deltatime}\n"
+            round_number += 1
+
+        return csv_str
+
 
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -118,6 +130,32 @@ def round_data(url_uuid):
                 db.session.rollback()
         return jsonify(message="There was an error posting round data"), 400
 
+@app.route("/export/<string:access_code>", methods=["GET"])
+def export(access_code:str):
+    if not access_code or access_code != os.environ.get("EXPORT_ACCESS_CODE"):
+        abort(404)
+        return
+    
+    def is_true(arg:str):
+        return arg.lower() == "true"
+    
+    GAME_IS_FINISHED = request.args.get("finished", False, type=is_true)
+
+    stream = io.BytesIO()
+    with zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED) as zip:
+        for game in Game.query.filter_by(finished=GAME_IS_FINISHED).all():
+            zip.writestr(
+                f"Game_{game.id}_{game.timestamp.isoformat(timespec="seconds").replace(":", "")}.csv",
+                game.as_csv_str(),
+            )
+    stream.seek(0)
+
+    return send_file(
+        stream,
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=f"Coin_Game_Export_{datetime.datetime.now().isoformat(timespec="seconds").replace(":", "")}.zip"
+    )
 
 # ---- MAIN ----
 if __name__ == "__main__":
