@@ -140,11 +140,13 @@ def export(access_code:str):
     def is_true(arg:str):
         return arg.lower() == "true"
     
-    GAME_IS_FINISHED = request.args.get("finished", False, type=is_true)
-
+    query = Game.query
+    if request.args.get("finished", False, type=is_true):
+        query = query.filter_by(finished=True)
+    
     stream = io.BytesIO()
     with zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED) as zip:
-        for game in Game.query.filter_by(finished=GAME_IS_FINISHED).all():
+        for game in query.all():
             zip.writestr(
                 f"Game_{game.id}_{game.timestamp.isoformat(timespec="seconds").replace(":", "")}.csv",
                 game.as_csv_str(),
