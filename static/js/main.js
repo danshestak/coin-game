@@ -24,40 +24,38 @@ confirmButton.addEventListener("click", async function() {
     
     await startGame();
 
-    // await typewriter(mainText, "Looking for partner");
-    // let ellipses = 0;
-    // const ellipsesInterval = setInterval(() => {
-    //     mainText.textContent = "Looking for partner"+".".repeat(ellipses+1);
-    //     ellipses = (ellipses + 1) % 3;
-    // }, 400);
+    await typewriter(mainText, "Looking for partner");
+    let ellipses = 0;
+    const ellipsesInterval = setInterval(() => {
+        mainText.textContent = "Looking for partner"+".".repeat(ellipses+1);
+        ellipses = (ellipses + 1) % 3;
+    }, 400);
 
-    // await delay(3000 + Math.random() * 5000);
-    // clearInterval(ellipsesInterval);
+    await delay(5000 + Math.random() * 8000);
+    clearInterval(ellipsesInterval);
 
-    // typewriter(mainText, "Partner found.");
-    // await delay(3000);
+    typewriter(mainText, "Partner found.");
+    await delay(3000);
 
-    // typewriter(mainText, "Welcome to Coin Game!");
-    // await delay(4000);
+    typewriter(mainText, "Welcome to Coin Game!");
+    await delay(4000);
 
-    // typewriter(mainText, "You and your partner have a shared balance.");
-    // await delay(5000);
+    typewriter(mainText, "You and your partner have a shared balance.");
+    await delay(5000);
 
-    // typewriter(mainText, "You will take turns selecting a coin, and its value will be added to your balance.");
-    // await delay(6000);
+    typewriter(mainText, "You will take turns selecting a coin, and its value will be added to your balance.");
+    await delay(6000);
 
-    // typewriter(mainText, "Either player may also pass their turn to their partner.");
-    // await delay(5000);
+    typewriter(mainText, "Either player may also pass their turn to their partner.");
+    await delay(5000);
 
-    // typewriter(mainText, "Good luck!");
-    // await delay(4000);
+    typewriter(mainText, "Good luck!");
+    await delay(4000);
 
     balance.innerHTML = "Balance: "+numberToColoredSpan(0);
     header.style.visibility = "visible";
     footer.style.visibility = "visible";
-    coins.style.display = "flex";
     confirmButton.textContent = "Let my partner choose!";
-    confirmButton.style.display = "block";
     newRound();
 }, {once: true});
 
@@ -235,7 +233,7 @@ async function playerPick(passed) {
     } else {
         typewriter(mainText, "You selected the "+raceWinner.slice(0, -5)+" coin...");
     }
-    highlightOption(raceWinner);
+    highlightOption(raceWinner=="timeout"?"pass":raceWinner);
     await delay(3000);
 
     let points = null;

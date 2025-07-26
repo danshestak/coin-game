@@ -68,7 +68,7 @@ body {
 
 #coins * :hover {
   scale: 1.1;
-  filter: brightness(120%) contrast(120%) saturate(80%);
+  filter: brightness(110%) contrast(110%) saturate(80%);
 }
 
 #confirm {
